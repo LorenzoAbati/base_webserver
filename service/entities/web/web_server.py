@@ -38,8 +38,6 @@ class WebServer:
         return f"{self._host}:{self._port}"
 
     def run(self):
-        # Use the logger instance to log messages
-        logger.info(f"Server is running at http://{self._host}:{self._port}")
         aiohttp.web.run_app(self._web, host=self._host, port=self._port)
 
     def _init_server(self, controller):
