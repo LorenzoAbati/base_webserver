@@ -3,3 +3,5 @@ files:
     location: "res/css"
   - path: "/js/"
     location: "res/js"
+  - path: "/images/"
+    location: "res/images"
