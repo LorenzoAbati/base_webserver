@@ -45,9 +45,48 @@ class WebServer:
     def _init_server(self, controller):
         routes = self._load_routes(controller)
         self._set_routes(routes)
+        file_routes = self._load_file_routes()
+        self._set_file_routes(file_routes)
+
+    def _set_file_routes(self, file_routes) -> None:
+        for file_route in file_routes:
+            self._web.router.add_static(file_route.path, path=file_route.location)
 
     def _set_routes(self, routes: List[aiohttp.web_routedef.RouteDef]) -> None:
         self._web.add_routes(routes)
+
+    def _load_file_routes(self):
+        # Define a FileRoute named tuple to easily organize our file routes
+        FileRoute = namedtuple('FileRoute', ['path', 'location'])
+
+        file_routes = []
+
+        try:
+            # Load file routes from YAML
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+
+            with open(os.path.join(dir_path, '../api/files.yaml'), 'r') as file:
+                files_config = yaml.safe_load(file)
+
+                # Validate the loaded configuration
+                if not isinstance(files_config, dict) or "files" not in files_config:
+                    raise ValueError("The files.yaml does not have the expected format.")
+
+                for file_route in files_config["files"]:
+                    if not all(key in file_route for key in ['path', 'location']):
+                        raise ValueError(f"Missing keys in file route configuration: {file_route}")
+
+                    file_routes.append(FileRoute(file_route["path"], file_route["location"]))
+
+            logger.info("File routes added successfully")
+            return file_routes
+
+        except FileNotFoundError:
+            logger.error("Error: files.yaml file was not found!")
+        except yaml.YAMLError as e:
+            logger.error(f"Error parsing files.yaml: {e}")
+        except ValueError as e:
+            logger.error(f"Error in file routes configuration: {e}")
 
     def _load_routes(self, controller: Controller) -> aiohttp.web_routedef.RouteDef:
         # Define a Route named tuple to easily organize our routes

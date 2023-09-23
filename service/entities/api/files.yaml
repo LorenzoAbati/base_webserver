@@ -1,0 +1,5 @@
+files:
+  - path: "/css/"
+    location: "res/css"
+  - path: "/js/"
+    location: "res/js"
