@@ -1,17 +1,16 @@
 from aiohttp import web
 
 
-# Define the action for the "/" route
-async def home_controller_index(request):
-    return web.Response(text="Home Controller: Index Action")
+class Controller:
+    def __init__(self, app):
+        self._app = app
 
+    async def home_controller_index(self, request):
+        return web.Response(text="Home Controller: Index Action")
 
-# Define the action to show the login form
-async def auth_controller_show_login_form(request):
-    return web.Response(text="Auth Controller: Show Login Form Action")
+    async def auth_controller_show_login_form(self, request):
+        return web.Response(text="Auth Controller: Show Login Form Action")
 
-
-# Define the action to perform login
-async def auth_controller_do_login(request):
-    # In real-world scenarios, you would handle login logic here.
-    return web.Response(text="Auth Controller: Do Login Action")
+    async def auth_controller_do_login(self, request):
+        # In real-world scenarios, you would handle login logic here.
+        return web.Response(text="Auth Controller: Do Login Action")

@@ -1,23 +1,25 @@
-from service.entities.api.web_server import WebServer
 from aiohttp import web
+from service.entities.api.controller import Controller
 
 
-class ApiManager:
+class Api:
 
     def __init__(self, app):
         self._app = app
-        self._middlewares = []
 
-        self._manage_middlewares()
+        self.controller = Controller(app=app)
 
-        self.web_server = WebServer(app=self._app, middlewares=self._middlewares)
+    @property
+    def middlewares(self):
+        middlewares = []
 
-    def _manage_middlewares(self):
         def register_middleware(func):
-            self._middlewares.append(func)
+            middlewares.append(func)
             return func
 
         @web.middleware
         @register_middleware
         async def authenticate(request: web.Request, handler):
             return await handler(request)
+
+        return middlewares
