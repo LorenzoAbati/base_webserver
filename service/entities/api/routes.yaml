@@ -1,0 +1,12 @@
+routes:
+  - path: "/"
+    method: "GET"
+    action: "home_controller_index"
+
+  - path: "/login"
+    method: "GET"
+    action: "auth_controller_show_login_form"
+
+  - path: "/login"
+    method: "POST"
+    action: "auth_controller_do_login"
