@@ -18,7 +18,7 @@ class WebServer:
                  middlewares: List[aiohttp.web_routedef.RouteDef] = None):
 
         self._port = '8080' if port is None else int(port)
-        self._host = '127.0.0.1' if host is None else str(host)
+        self._host = '0.0.0.0' if host is None else str(host)
         self._web = aiohttp.web.Application(middlewares=middlewares)
 
         self._init_server(controller)
